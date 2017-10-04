@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    .container
+        h1= title
+        h3 Enter your credentials. If you have no account - we will create one for you!
+        form#login-form
+            .form-errors.alert.alert-danger(style="display: none;")
+                h4.alert-heading Whoops!
+                .alert-body
+            .form-group.row
+                label.col-sm-2.col-form-label Email
+                .col-sm-10
+                    input.form-control(type="email", name="email", required=true, placeholder="Enter email")
+            .form-group.row
+                label.col-sm-2.col-form-label Password
+                .col-sm-10
+                    input.form-control(type="password", name="password", required=true, placeholder="Enter password")
+            .form-group
+                button.btn.btn-primary(type="submit") Submit
+
+append scripts
+    script(src='/js/login.js')

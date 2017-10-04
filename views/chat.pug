@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    .container
+        h1= title
+        .lead Chat is coming soon!
+
+        #room
+            ul.list-unstyled
+            form
+                input.form-control(autocomplete=false, autofocus=true, placeholder='Type a message...')
+
+append scripts
+    script(src="/socket.io/socket.io.js")
+    script(src="/js/io.js")

@@ -1,0 +1,18 @@
+nav.navbar.navbar-expand.navbar-primary.bg-light
+    a.navbar-brand(href='/') Supa-Dupa Chat
+    button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbar-colapse")
+        span.navbar-toggler-icon
+    #collapse.collapse.navbar-collapse.justify-content-between
+        .navbar-nav
+            if user
+                a.nav-item.nav-link(href='/chat') Chat
+            a.nav-item.nav-link.disabled(href='#') One
+            a.nav-item.nav-link.disabled(href='#') Two
+        if user
+            .nav-item.dropdown
+                a.nav-link.dropdown-toggle(href='javascript:void(0);', data-toggle='dropdown')= user.name
+                .dropdown-menu
+                    a.dropdown-item(href='javascript:void(0);', onclick='$("#logout-form").submit();') Logout
+                    form#logout-form.form-inline.hidden(method='POST', action='/logout')
+        else
+            a.btn.btn-secondary(href='/login') Login
