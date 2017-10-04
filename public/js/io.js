@@ -19,10 +19,6 @@ $form.submit(function () {
     return false;
 });
 
-$('#logout-form').submit(function () {
-    socket.emit('session:reload', socket.id);
-});
-
 function printStatus(status) {
     $('<li>').append($('<i class="text-warning">').text(status)).appendTo($history);
 }
@@ -39,6 +35,9 @@ socket
     })
     .on('leave', (user_email) => {
         $('<li>').append($('<i class="text-danger">').text(user_email + ' left chat')).appendTo($history);
+    })
+    .on('logout', () => {
+        location.href = '/';
     })
     .on('error', function (text) {
         alert('Server error: ' + text);

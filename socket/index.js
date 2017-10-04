@@ -78,6 +78,29 @@ module.exports = function (server, app) {
             })
     });
 
+    io.on('sess_reload', function (sid) {
+        let clients = io.sockets.connected; // clients
+        for (let key in clients) {
+            if (!clients.hasOwnProperty(key)) continue;
+
+            let socket = clients[key];
+
+            if (socket.handshake.session.id === sid) {
+                sessionStore.load(sid, function (err, session) {
+                    if (err) {
+                        next(err);
+                        return socket.disconnect();
+                    }
+                    if (!session) {
+                        socket.emit('logout');
+                        return socket.disconnect();
+                    }
+                    socket.handshake.session = session;
+                });
+            }
+        }
+    });
+
     io.on('connection', function (socket) {
         let user_email = socket.handshake.user.get('email');
 
@@ -88,25 +111,9 @@ module.exports = function (server, app) {
             cb(text); // client acknowledgement
         });
 
-        socket.on('session:reload', function () {
-            let sid = socket.session.id;
-            // io.connected.forEach((client, id) => {
-            //     if (id !== sid) return;
-
-                loadSession(sid, function (err, session) {
-                    if (err) {
-                        next(err);
-                        return socket.disconnect();
-                    }
-                    if (!session) {
-                        // next(err);
-                        socket.emit('error', 'Handshake unauthorized');
-                        return socket.disconnect();
-                    }
-                    socket.handshake.session = session;
-                })
-            // })
-        });
+        // socket.on('error', function (text) {
+        //
+        // });
 
         socket.on('disconnect', function () {
             clients.splice(clients.indexOf(socket), 1);
